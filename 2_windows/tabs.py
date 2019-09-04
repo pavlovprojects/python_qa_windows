@@ -30,7 +30,6 @@ def test_windows(browser):
     main_window = browser.current_window_handle
     old_windows = browser.window_handles
     browser.execute_script('window.open();')  # открывает новое окно
-    # TODO: Написать ожидание появления нового окна, идентификатор которого отсутствует в списке oldWindows
     # https://selenium-python.readthedocs.io/waits.html
     new_window = WebDriverWait(browser, 2).until(there_is_window_other_than(old_windows))
     browser.switch_to.window(new_window)
