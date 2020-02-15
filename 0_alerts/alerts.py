@@ -5,8 +5,10 @@ from selenium import webdriver
 
 @pytest.fixture
 def browser():
-    wd = webdriver.Chrome()
-    return wd
+    # wd = webdriver.Chrome()
+    wd = webdriver.Firefox()
+    yield wd
+    wd.quit()
 
 
 def test_example(browser):
