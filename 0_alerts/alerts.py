@@ -1,6 +1,8 @@
 import pytest
 import time
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+import selenium.webdriver.support.expected_conditions as EC
 
 
 @pytest.fixture
@@ -15,6 +17,7 @@ def test_example(browser):
     browser.get("https://otus.ru/")
     browser.execute_script("alert('123');")
     time.sleep(2)
+    WebDriverWait(browser, 10).until(EC.alert_is_present())
     alert = browser.switch_to.alert
     alert_text = alert.text
     print(alert_text)
@@ -28,7 +31,7 @@ def test_example(browser):
     time.sleep(2)
     prompt.dismiss()
 
-    browser.execute_script('confirm("Are You Ok?");')
+    browser.execute_script("confirm('Are You Ok?');")
     time.sleep(2)
     confirm = browser.switch_to.alert
     print(confirm.text)

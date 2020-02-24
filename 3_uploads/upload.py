@@ -5,17 +5,30 @@ from selenium import webdriver
 
 
 @pytest.fixture
-def chrome_browser():
-    return webdriver.Chrome()
+def driver(request):
+    driver = webdriver.Chrome()
+    driver.implicitly_wait(20)
+
+    def fin():
+        driver.quit()
+
+    request.addfinalizer(fin)
+    return driver
 
 
-def test_download(chrome_browser):
-    chrome_browser.get('http://demo.guru99.com/test/upload/')
-    # Нужен абсолютный путь
+def test_upload_guru99(driver):
+    driver.get('http://demo.guru99.com/test/upload/')
     dirname = os.path.dirname(__file__)
     filename = os.path.join(dirname, 'selenium.png')
-    # Получаем поле типа файл
-    input_manager = chrome_browser.find_element_by_css_selector('input#uploadfile_0')
+    input_manager = driver.find_element_by_css_selector('input#uploadfile_0')
     input_manager.send_keys(filename)
-    chrome_browser.find_element_by_id("submitbutton").click()
+    driver.find_element_by_id("submitbutton").click()
+    time.sleep(10)
+
+
+def test_upload_radical(driver):
+    driver.get('https://radikal.ru')
+    uploader = driver.find_element_by_class_name("upload1")
+    filename = os.path.join(os.path.dirname(__file__), 'selenium.png')
+    uploader.send_keys(filename)
     time.sleep(10)
